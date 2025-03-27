@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './App.css';
 import { use } from 'react';
+import SearchIcon from "./assets/Search.svg";
+import heroimg from "./assets/hero-image-github-profile.jpg";
+import licenseicon from "../src/assets/Chield_alt.svg";
+import nestingicon from "../src/assets/Nesting.svg";
+import staricon from "../src/assets/Star.svg";
 const App = () => {
 
   const [suggestion, setSuggestion] = useState('');
@@ -15,18 +20,13 @@ const App = () => {
     setTimeout(() => {
       setInput(e.target.value);
     }, 10);
-
-  };
+  }
+  
 
 
 
   const handlesuggestion = function () {
-
     setuser(suggestion);
-    console.log("suggestion is set");
-    console.log(suggestion);
-    console.log("user is set");
-    console.log(user);
     setSuggestion('');
   };
 
@@ -36,7 +36,10 @@ const App = () => {
     try {
 
       const response = await fetch(user.repos_url, {
-        method: "GET"
+        method: "GET",
+        headers: {
+          Authorization: `token ${process.env.API_TOKEN}`
+        }
       });
 
       if (!response.ok) {
@@ -45,16 +48,13 @@ const App = () => {
       const data = await response.json();
 
 
-      console.log("Fetched Repositories:", data);
-
       if (Array.isArray(data)) {  // ✅ Ensure data is an array 
         setrepos(data);
-        // Update state with the repository array
         setshowrepos(data.slice(0, 4));
         sethiddenrepos(data.slice(4));
       } else {
-        console.error("Unexpected response format:", data);
-      }
+
+        console.error("something goes wrong");}
     } catch (error) {
       console.error("Error fetching repositories:", error);
     }
@@ -62,18 +62,17 @@ const App = () => {
 
 
   useEffect(() => {
-    console.log("effect is runnig")
     fetchrepos();
-  }, [user]); // Runs when `user` changes
+  }, [user]);
 
 
   const fetchdata = async () => {
     try {
       const response = await fetch(`https://api.github.com/users/${input}`, {
         method: "GET",
-        // headers: {
-        //   Authorization: `token ${token}`
-        // }
+        headers: {
+          Authorization: `token ${process.env.API_TOKEN}`
+        }
       });
       console.log(response)
       if (response.ok) {
@@ -101,6 +100,7 @@ const App = () => {
 
   const handlerepos = () => {
     setshowrepos([...showrepos, ...hiddenrepos]);
+    sethiddenrepos([]);
     const btn = document.querySelector('.viewbtn');
     btn.style.display = "none";
   }
@@ -108,10 +108,10 @@ const App = () => {
   return (
     <div>
       <div className="hero">
-        <img className='hero_img' src="./assets/hero-image-github-profile.jpg" alt=""  />
+        <img className='hero_img' src={heroimg} alt=""  />
 
         <div className="search_sect">
-          <img src="../src/assets/Search.svg" alt="bg"/>
+          <img src={SearchIcon} className="bg"/>
           <input type="text" className="search" placeholder='username' onChange={handleinput}  autoFocus/>
 
         </div>
@@ -173,9 +173,9 @@ const App = () => {
                 <span className='desc'>{repo.description}</span>
                 {/* Repository Info Section */}
                 <div className="repo_info">
-                  <img src="../src/assets/Chield_alt.svg" alt="Child Icon" /><span>{(repo.license?.name || "").split(" ")[0]}</span>
-                  <img src="../src/assets/Nesting.svg" alt="Nesting Icon" /><span> {repo?.forks_count}</span>
-                  <img src="../src/assets/Star.svg" alt="Star Icon" /><span>{repo?.stargazers_count}</span>
+                  <img src={licenseicon} alt="Child Icon" /><span>{(repo.license?.name || "").split(" ")[0]}</span>
+                  <img src={nestingicon} alt="Nesting Icon" /><span> {repo?.forks_count}</span>
+                  <img src={staricon} alt="Star Icon" /><span>{repo?.stargazers_count}</span>
                   <span className='updated'></span>
                 </div>
 
