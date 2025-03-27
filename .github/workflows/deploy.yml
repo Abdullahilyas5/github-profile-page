@@ -27,6 +27,9 @@ jobs:
           export NODE_ENV=production
           npm install --frozen-lockfile
 
+      - name: Set environment variables
+        run: echo "VITE_API_TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV
+
       - name: Build project
         run: npm run build
 
@@ -59,3 +62,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           enable_jekyll: false
+
+env:
+  VITE_API_TOKEN: ${{ secrets.TOKEN }}
