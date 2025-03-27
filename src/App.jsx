@@ -6,6 +6,8 @@ import heroimg from "./assets/hero-image-github-profile.jpg";
 import licenseicon from "../src/assets/Chield_alt.svg";
 import nestingicon from "../src/assets/Nesting.svg";
 import staricon from "../src/assets/Star.svg";
+const key = import.meta.env.VITE_API_TOKEN;
+
 const App = () => {
 
   const [suggestion, setSuggestion] = useState('');
@@ -38,7 +40,7 @@ const App = () => {
       const response = await fetch(user.repos_url, {
         method: "GET",
         headers: {
-          Authorization: `token ${process.env.API_TOKEN}`
+          Authorization: `token ${key}`
         }
       });
 
@@ -71,7 +73,7 @@ const App = () => {
       const response = await fetch(`https://api.github.com/users/${input}`, {
         method: "GET",
         headers: {
-          Authorization: `token ${process.env.API_TOKEN}`
+          Authorization: `token ${key}`
         }
       });
       console.log(response)
