@@ -67,7 +67,6 @@ const App = () => {
     fetchrepos();
   }, [user]);
 
-
   const fetchdata = async () => {
     try {
       const response = await fetch(`https://api.github.com/users/${input}`, {
